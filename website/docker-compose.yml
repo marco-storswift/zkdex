@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  caddy:
+    image: caddy
+    restart: always
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./dist:/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.aleoswap.rule=Host(`192.168.11.75`)"
+      - "traefik.http.routers.aleoswap.service=aleoswap"
+      - "traefik.http.routers.aleoswap.entrypoints=http8001"
+      - "traefik.http.services.aleoswap.loadbalancer.server.port=80"

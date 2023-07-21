@@ -1,0 +1,14 @@
+.jekLCw {
+    position: relative;
+    background-color: rgb(245, 246, 252);
+    border-radius: 12px;
+    padding: 16px;
+    color: rgb(119, 128, 160);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    height: 6.25rem;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}

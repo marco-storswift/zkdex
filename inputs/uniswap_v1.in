@@ -1,0 +1,12 @@
+// The program input for uinaleo/src/main.leo
+[mint_public_a]
+public receiver: address = aleo1ht2a9q0gsd38j0se4t9lsfulxgqrens2vgzgry3pkvs93xrrzu8s892zn7;
+public amount: u64 = 2u64;
+
+
+[mint_public]
+public token_a: tokenA = {  owner: aleo1y3yp6kaq4tl04u06fy4k43kvcl4azlddy0fsamdj6smsa6rnxg9sk09ltz.private,  amount: 1000000000000u64.private,  _nonce: 7380611703780387557781500296889296390568172849526224352296093596785909031229group.public};
+public amount_a: u64 = 5000u64;
+public token_a: tokenB = {  owner: aleo1y3yp6kaq4tl04u06fy4k43kvcl4azlddy0fsamdj6smsa6rnxg9sk09ltz.private,  amount: 1000000000000u64.private,  _nonce: 4097713206650377324588704918533616899872270051931314885692766553556016197579group.public};
+public amount_a: u64 = 5000u64;
+

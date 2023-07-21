@@ -1,0 +1,10 @@
+{
+  "program": "uniswap_v5.aleo",
+  "version": "0.0.0",
+  "description": "",
+  "development": {
+    "private_key": "APrivateKey1zkp9i8rym53RtM1D4ez664trapdXpskyFrMo9gTgseY84Zt",
+    "address": "aleo1c76j265zsdm063f3f8tfv4pgguh2n7pez9w0gjwqu3dg5az4usyszh0fuu"
+  },
+  "license": "MIT"
+}

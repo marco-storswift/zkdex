@@ -1,0 +1,60 @@
+.hfTphi {
+    position: relative;
+    background-color: rgb(19, 26, 42);
+    border-radius: 12px;
+    padding: 16px;
+    color: rgb(152, 161, 192);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+.hfTphi:hover::before {
+    border-color: rgba(152, 161, 192, 0.08);
+}
+
+.hfTphi::before {
+    box-sizing: border-box;
+    background-size: 100%;
+    border-radius: inherit;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    content: "";
+    border: 1px solid rgb(19, 26, 42);
+}
+
+.diLZKF {
+    filter: none;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out 0s;
+    text-align: left;
+    font-size: 28px;
+    line-height: 44px;
+    font-variant: small-caps;
+}
+
+.jLlucA {
+    color: rgb(255, 255, 255);
+    width: 0px;
+    position: relative;
+    font-weight: 400;
+    outline: none;
+    border: none;
+    flex: 1 1 auto;
+    background-color: transparent;
+    font-size: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0px;
+    appearance: textfield;
+    text-align: left;
+}
+
+.ant-input::placeholder {
+    color: #5D6785 !important;
+}
