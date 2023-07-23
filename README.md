@@ -5,55 +5,34 @@
 
 ## Build Guide
 
-To compile this Aleo program, run:
-```bash
-aleo build
-```
+To compile this Aleo program, run: `aleo build`
 
-## pool合约
+## pool contract
 
-- 创建池子
-- 初始流通性：记录
-- 添加流通性：记录
-- 赎回流通性：记录
-- swap：
-    - 查询（或后端实现）
-        - 所有代币信息（名称）
-        - 所有Pool交易对
-            ```shell
-            [{
-                tokenA:10000, 100 - 1 = 99; 99+10000
-                tokenB:8000,  				8000-x	
-            },{
-                tokenA:9000, 
-                tokenC:8000,  				
-            }]
-          ```
-        - 根据用户钱包，查询用户的Pool交易对
-            ```shell
-            [{
-                totaltokenA:20000, 
-                totaltokenB:16000, 
-                lp:50%
-            },{
-                totaltokenA:12000, 
-                totaltokenC:10000,  
-                lp:25%,				
-            }]
-            ```
+1. [Smart contract](https://www.aleo123.io/programDetail/uniswap_v5.aleo)
+2. connect wallet
+    - [download public](https://chrome.google.com/webstore/search/soter?utm_source=ext_sidebar&hl=zh-CN)
+3. mint test coin
+    - mint_public_a
+    - mint_public_b
+    - mint_private_a
+    - mint_private_b
+4. Init Pool or Added liquidity
+    - mint_private
+    - mint_public
+5. Redemption liquidity
+    - burn_public
+6. swap
+    - swap_a_to_b_private
+    - swap_b_to_a_private
+    - swap_a_to_b_public
+    - swap_b_to_a_public
 
-## 交易对合约
+## uniswap website
 
-- 部署合约
-    - 填表，线下完成（Uniswap + TokenA + TokenB）
-- 初始流通性：
-
-- 添加流通性：
-    - 参数：poolname，recordA， recordB
-- 赎回流通性
-    - 参数：poolname
-- swap（支持滑点）
-
-## 参考资料
-
-https://www.jianshu.com/p/2150daec3aa1
+1. build
+    - `cd website`
+    - `yarn install`
+    - `yarn dev`
+2. Usage
+   [Video](https://github.com/marco-storswift/zkdex/blog/main/video/uniswap.mov)
