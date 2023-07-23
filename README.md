@@ -35,4 +35,4 @@ To compile this Aleo program, run: `aleo build`
     - `yarn install`
     - `yarn dev`
 2. Usage
-   [Video](https://github.com/marco-storswift/zkdex/blog/main/video/uniswap.mov)
+   [Video](https://github.com/marco-storswift/zkdex/blob/main/video/uniswap.mov)
