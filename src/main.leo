@@ -18,15 +18,15 @@ program uniswap_v5.aleo {
     /* Mint */
 
     // The function `mint_public` issues the specified tokenA amount for the tokenA receiver publicly on the network.
-    transition mint_public_a(public receiver: address, public amount: u64) {
+    async transition mint_public_a(public receiver: address, public amount: u64) -> Future {
         // Mint the tokenAs publicly by invoking the computation on-chain.
         if self.caller != aleo1y3yp6kaq4tl04u06fy4k43kvcl4azlddy0fsamdj6smsa6rnxg9sk09ltz as address {
             assert(amount<=1000u64);
         }
-        return then finalize(receiver, amount);
+        return finalize_mint_public_a(receiver, amount);
     }
 
-    finalize mint_public_a(public receiver: address, public amount: u64) {
+    async function finalize_mint_public_a(public receiver: address, public amount: u64) {
         // Increments `account_a[receiver]` by `amount`.
         // If `account_a[receiver]` does not exist, it will be created.
         // If `account_a[receiver] + amount` overflows, `mint_public` is reverted.
@@ -47,12 +47,12 @@ program uniswap_v5.aleo {
     }
 
     /* Transfer */
-    transition transfer_public_a(public receiver: address, public amount: u64) {
+    async transition transfer_public_a(public receiver: address, public amount: u64) -> Future {
         // Transfer the tokenAs publicly, by invoking the computation on-chain.
-        return then finalize(self.caller, receiver, amount);
+        return finalize_transfer_public_a(self.caller, receiver, amount);
     }
 
-    finalize transfer_public_a(public sender: address, public receiver: address, public amount: u64) {
+    async function finalize_transfer_public_a(public sender: address, public receiver: address, public amount: u64) {
         // Decrements `account_a[sender]` by `amount`.
         // If `account_a[sender]` does not exist, it will be created.
         // If `account_a[sender] - amount` underflows, `transfer_public` is reverted.
@@ -92,7 +92,7 @@ program uniswap_v5.aleo {
 
     // The function `transfer_private_to_public` turns a specified tokenA amount from a tokenA record into public tokenAs for the specified receiver.
     // This function preserves privacy for the sender's record, however it publicly reveals the tokenA receiver and the tokenA amount.
-    transition transfer_private_to_public_a(sender: tokenA, public receiver: address, public amount: u64) -> tokenA {
+    async transition transfer_private_to_public_a(sender: tokenA, public receiver: address, public amount: u64) -> (tokenA, Future) {
         // Checks the given tokenA record has a sufficient tokenA amount.
         // This `sub` operation is safe, and the proof will fail if an underflow occurs.
         // `difference` holds the change amount for the caller.
@@ -107,10 +107,10 @@ program uniswap_v5.aleo {
 
         // Output the sender's change record.
         // Increment the tokenA amount publicly for the tokenA receiver.
-        return remaining then finalize(receiver, amount);
+        return (remaining, finalize_transfer_private_to_public_a(receiver, amount));
     }
 
-    finalize transfer_private_to_public_a(public receiver: address, public amount: u64) {
+    async function finalize_transfer_private_to_public_a(public receiver: address, public amount: u64) {
         // Increments `account_a[receiver]` by `amount`.
         // If `account_a[receiver]` does not exist, it will be created.
         // If `account_a[receiver] + amount` overflows, `transfer_private_to_public` is reverted.
@@ -120,7 +120,7 @@ program uniswap_v5.aleo {
 
     // The function `transfer_public_to_private` turns a specified tokenA amount from `account_a` into a tokenA record for the specified receiver.
     // This function preserves privacy for the receiver's record, however it publicly reveals the caller and the specified tokenA amount.
-    transition transfer_public_to_private_a(public receiver: address, public amount: u64) -> tokenA {
+    async transition transfer_public_to_private_a(public receiver: address, public amount: u64) -> (tokenA, Future) {
         // Produces a tokenA record for the tokenA receiver.
         let transferred: tokenA = tokenA {
             owner: receiver,
@@ -130,10 +130,10 @@ program uniswap_v5.aleo {
 
         // Output the receiver's record.
         // Decrement the tokenA amount of the caller publicly.
-        return transferred then finalize(self.caller, amount);
+        return (transferred , finalize_transfer_public_to_private_a(self.caller, amount));
     }
 
-    finalize transfer_public_to_private_a(public sender: address, public amount: u64) {
+    async function finalize_transfer_public_to_private_a(public sender: address, public amount: u64) {
         // Decrements `account_a[sender]` by `amount`.
         // If `account_a[sender]` does not exist, it will be created.
         // If `account_a[sender] - amount` underflows, `transfer_public_to_private` is reverted.
@@ -157,15 +157,15 @@ program uniswap_v5.aleo {
     /* Mint */
 
     // The function `mint_public` issues the specified tokenB amount for the tokenB receiver publicly on the network.
-    transition mint_public_b(public receiver: address, public amount: u64) {
+    async transition mint_public_b(public receiver: address, public amount: u64) -> Future {
         // Mint the tokenBs publicly by invoking the computation on-chain.
         if self.caller != aleo1y3yp6kaq4tl04u06fy4k43kvcl4azlddy0fsamdj6smsa6rnxg9sk09ltz as address {
             assert(amount<=1000u64);
         }
-        return then finalize(receiver, amount);
+        return finalize_mint_public_b(receiver, amount);
     }
 
-    finalize mint_public_b(public receiver: address, public amount: u64) {
+    async function finalize_mint_public_b(public receiver: address, public amount: u64) {
         // Increments `account_b[receiver]` by `amount`.
         // If `account_b[receiver]` does not exist, it will be created.
         // If `account_b[receiver] + amount` overflows, `mint_public` is reverted.
@@ -186,12 +186,12 @@ program uniswap_v5.aleo {
     }
 
     /* Transfer */
-    transition transfer_public_b(public receiver: address, public amount: u64) {
+    async transition transfer_public_b(public receiver: address, public amount: u64) -> Future {
         // Transfer the tokenBs publicly, by invoking the computation on-chain.
-        return then finalize(self.caller, receiver, amount);
+        return finalize_transfer_public_b(self.caller, receiver, amount);
     }
 
-    finalize transfer_public_b(public sender: address, public receiver: address, public amount: u64) {
+    async function finalize_transfer_public_b(public sender: address, public receiver: address, public amount: u64) {
         // Decrements `account_b[sender]` by `amount`.
         // If `account_b[sender]` does not exist, it will be created.
         // If `account_b[sender] - amount` underflows, `transfer_public` is reverted.
@@ -231,7 +231,7 @@ program uniswap_v5.aleo {
 
     // The function `transfer_private_to_public` turns a specified tokenB amount from a tokenB record into public tokenBs for the specified receiver.
     // This function preserves privacy for the sender's record, however it publicly reveals the tokenB receiver and the tokenB amount.
-    transition transfer_private_to_public_b(sender: tokenB, public receiver: address, public amount: u64) -> tokenB {
+    async transition transfer_private_to_public_b(sender: tokenB, public receiver: address, public amount: u64) -> (tokenB, Future) {
         // Checks the given tokenB record has a sufficient tokenB amount.
         // This `sub` operation is safe, and the proof will fail if an underflow occurs.
         // `difference` holds the change amount for the caller.
@@ -246,10 +246,10 @@ program uniswap_v5.aleo {
 
         // Output the sender's change record.
         // Increment the tokenB amount publicly for the tokenB receiver.
-        return remaining then finalize(receiver, amount);
+        return (remaining, finalize_transfer_private_to_public_b(receiver, amount));
     }
 
-    finalize transfer_private_to_public_b(public receiver: address, public amount: u64) {
+    async function finalize_transfer_private_to_public_b(public receiver: address, public amount: u64) {
         // Increments `account_b[receiver]` by `amount`.
         // If `account_b[receiver]` does not exist, it will be created.
         // If `account_b[receiver] + amount` overflows, `transfer_private_to_public` is reverted.
@@ -259,7 +259,7 @@ program uniswap_v5.aleo {
 
     // The function `transfer_public_to_private` turns a specified tokenB amount from `account_b` into a tokenB record for the specified receiver.
     // This function preserves privacy for the receiver's record, however it publicly reveals the caller and the specified tokenB amount.
-    transition transfer_public_to_private_b(public receiver: address, public amount: u64) -> tokenB {
+    async transition transfer_public_to_private_b(public receiver: address, public amount: u64) -> (tokenB, Future) {
         // Produces a tokenB record for the tokenB receiver.
         let transferred: tokenB = tokenB {
             owner: receiver,
@@ -269,10 +269,10 @@ program uniswap_v5.aleo {
 
         // Output the receiver's record.
         // Decrement the tokenB amount of the caller publicly.
-        return transferred then finalize(self.caller, amount);
+        return (transferred, finalize_transfer_public_to_private_b(self.caller, amount));
     }
 
-    finalize transfer_public_to_private_b(public sender: address, public amount: u64) {
+    async function finalize_transfer_public_to_private_b(public sender: address, public amount: u64) {
         // Decrements `account_b[sender]` by `amount`.
         // If `account_b[sender]` does not exist, it will be created.
         // If `account_b[sender] - amount` underflows, `transfer_public_to_private` is reverted.
@@ -302,7 +302,7 @@ program uniswap_v5.aleo {
         amount: u64,
     }
 
-    transition mint_private(token_a: tokenA, amount_a: u64, token_b: tokenB, amount_b: u64) -> (tokenA, tokenB, LiquidityPool){
+    async transition mint_private(token_a: tokenA, amount_a: u64, token_b: tokenB, amount_b: u64) -> (tokenA, tokenB, LiquidityPool, Future){
         assert(token_a.amount - amount_a>=0u64);
         assert(token_b.amount - amount_b>=0u64);
 
@@ -328,10 +328,10 @@ program uniswap_v5.aleo {
             amount: lp_amount
         };
 
-        return (remaining_a, remaining_b, lp) then finalize(self.caller, lp_amount, amount_a, amount_b);
+        return (remaining_a, remaining_b, lp, finalize_mint_private(self.caller, lp_amount, amount_a, amount_b));
     }
 
-    finalize mint_private(owner: address, lp_amount: u64, amount_a: u64, amount_b: u64){
+    async function finalize_mint_private(owner: address, lp_amount: u64, amount_a: u64, amount_b: u64){
         //TODO token_a & token_b hash as key
         let current_config: Config = Mapping::get_or_use(config, 1field,
             Config {
@@ -346,54 +346,54 @@ program uniswap_v5.aleo {
 
         let liquidity_a: u64 = amount_a.mul_wrapped(current_config.total_supply).div_wrapped(current_config.reserve_a);
         let liquidity_b: u64 = amount_b.mul_wrapped(current_config.total_supply).div_wrapped(current_config.reserve_b);
-        let liquidity: u64 = 0u64;
-        if (liquidity_a > liquidity_b){
-            liquidity = liquidity_b;
-        }else{
-            liquidity = liquidity_a;
-        }
+        let liquidity: u64 = liquidity_a > liquidity_b ? liquidity_b : liquidity_a;
+        // if (liquidity_a > liquidity_b){
+        //     liquidity = liquidity_b;
+        // }else{
+        //     liquidity = liquidity_a;
+        // }
 
         let bfirst: bool = current_config.total_supply == 0u64;
-        let new_total_supply:u64 = 0u64;
-        let new_k_last:u64 = 0u64;
-        let new_lock:bool = false;
+        let new_total_supply:u64 = bfirst ? lp_amount : current_config.total_supply + liquidity;
+        let new_k_last:u64 = bfirst ? 0u64 : amount_a * amount_b;
+        let new_lock:bool = bfirst ? false : current_config.lock;
         let new_minimum_liquidity:u64 = 1000u64;
-        let new_reserve_a:u64 = 1u64;
-        let new_reserve_b:u64 = 1u64;
+        let new_reserve_a:u64 = bfirst ? amount_a : current_config.reserve_a + amount_a;
+        let new_reserve_b:u64 = bfirst ? amount_b : current_config.reserve_b + amount_b;
 
         if bfirst{
-        assert(lp_amount >= new_minimum_liquidity);
+            assert(lp_amount >= new_minimum_liquidity);
         }
 
-        if bfirst {
-            new_total_supply =  lp_amount;
-        } else {
-            new_total_supply = current_config.total_supply + liquidity;
-        }
+        // if bfirst {
+        //     new_total_supply =  lp_amount;
+        // } else {
+        //     new_total_supply = current_config.total_supply + liquidity;
+        // }
 
-        if bfirst {
-            new_k_last = 0u64;
-        } else {
-            new_k_last = amount_a * amount_b;
-        }
+        // if bfirst {
+        //     new_k_last = 0u64;
+        // } else {
+        //     new_k_last = amount_a * amount_b;
+        // }
 
-        if bfirst {
-            new_lock = false;
-        } else {
-            new_lock = current_config.lock;
-        }
+        // if bfirst {
+        //     new_lock = false;
+        // } else {
+        //     new_lock = current_config.lock;
+        // }
 
-        if bfirst {
-            new_reserve_a = amount_a;
-        } else {
-            new_reserve_a = current_config.reserve_a + amount_a;
-        }
+        // if bfirst {
+        //     new_reserve_a = amount_a;
+        // } else {
+        //     new_reserve_a = current_config.reserve_a + amount_a;
+        // }
 
-        if bfirst {
-            new_reserve_b = amount_b;
-        } else {
-            new_reserve_b = current_config.reserve_b+ amount_b;
-        }
+        // if bfirst {
+        //     new_reserve_b = amount_b;
+        // } else {
+        //     new_reserve_b = current_config.reserve_b+ amount_b;
+        // }
 
         let new_config: Config = Config {
             total_supply: new_total_supply,
@@ -406,7 +406,7 @@ program uniswap_v5.aleo {
         Mapping::set(config, 1field, new_config);
     }
 
-    transition mint_private_to_public(public lp: LiquidityPool, public amount: u64) -> (LiquidityPool){
+    async transition mint_private_to_public(public lp: LiquidityPool, public amount: u64) -> (LiquidityPool, Future){
         assert(lp.amount - amount>=0u64);
 
         let difference: u64 = lp.amount - amount;
@@ -416,16 +416,16 @@ program uniswap_v5.aleo {
             amount: difference,
         };
 
-        return remaining then finalize(self.caller, amount);
+        return (remaining, finalize_mint_private_to_public(self.caller, amount));
     }
 
-    finalize mint_private_to_public(public receiver: address, public amount: u64) {
+    async function finalize_mint_private_to_public(public receiver: address, public amount: u64) {
         let current_amount: u64 = Mapping::get_or_use(account, receiver, 0u64);
         Mapping::set(account, receiver, current_amount + amount);
     }
 
 
-    transition mint_public(public token_a: tokenA, public amount_a: u64, public token_b: tokenB, public amount_b: u64) -> (tokenA, tokenB){
+    async transition mint_public(public token_a: tokenA, public amount_a: u64, public token_b: tokenB, public amount_b: u64) -> (tokenA, tokenB, Future){
         assert(token_a.amount - amount_a>=0u64);
         assert(token_b.amount - amount_b>=0u64);
 
@@ -445,10 +445,10 @@ program uniswap_v5.aleo {
         //TODO Cross border risk
         let lp_amount: u64 = square_root(amount_a * amount_b);
 
-        return (remaining_a, remaining_b) then finalize(self.caller, lp_amount, amount_a, amount_b);
+        return (remaining_a, remaining_b, finalize_mint_public(self.caller, lp_amount, amount_a, amount_b));
     }
 
-    finalize mint_public(owner: address, lp_amount: u64, amount_a: u64, amount_b: u64){
+    async function finalize_mint_public(owner: address, lp_amount: u64, amount_a: u64, amount_b: u64){
         //TODO token_a & token_b hash as key
         let current_config: Config = Mapping::get_or_use(config, 1field,
             Config {
@@ -463,59 +463,59 @@ program uniswap_v5.aleo {
 
         let liquidity_a: u64 = amount_a.mul_wrapped(current_config.total_supply).div_wrapped(current_config.reserve_a);
         let liquidity_b: u64 = amount_b.mul_wrapped(current_config.total_supply).div_wrapped(current_config.reserve_b);
-        let liquidity: u64 = 0u64;
-        if (liquidity_a > liquidity_b){
-            liquidity = liquidity_b;
-        }else{
-            liquidity = liquidity_a;
-        }
+        let liquidity: u64 = liquidity_a > liquidity_b ? liquidity_b : liquidity_a;
+        // if (liquidity_a > liquidity_b){
+        //     liquidity = liquidity_b;
+        // }else{
+        //     liquidity = liquidity_a;
+        // }
 
         let bfirst: bool = current_config.total_supply == 0u64;
-        let new_account_value:u64 = Mapping::get_or_use(account, owner, 0u64);
-        let new_total_supply:u64 = 0u64;
-        let new_k_last:u64 = 0u64;
-        let new_lock:bool = false;
+        let new_total_supply:u64 = bfirst ? lp_amount : current_config.total_supply + liquidity;
+        let new_k_last:u64 = bfirst ? 0u64 : amount_a * amount_b;
+        let new_lock:bool = bfirst ? false : current_config.lock;
         let new_minimum_liquidity:u64 = 1000u64;
-        let new_reserve_a:u64 = 1u64;
-        let new_reserve_b:u64 = 1u64;
+        let new_account_value:u64 = bfirst ? (lp_amount - new_minimum_liquidity) : (Mapping::get_or_use(account, owner, 0u64) + liquidity);
+        let new_reserve_a:u64 = bfirst ? amount_a : current_config.reserve_a + amount_a;
+        let new_reserve_b:u64 = bfirst ? amount_b : current_config.reserve_b + amount_b;
 
-        if bfirst {
-            new_account_value =  lp_amount - new_minimum_liquidity;
-        } else {
-            new_account_value = new_account_value + liquidity;
-        }
+        // if bfirst {
+        //     new_account_value =  lp_amount - new_minimum_liquidity;
+        // } else {
+        //     new_account_value = new_account_value + liquidity;
+        // }
         Mapping::set(account, owner, new_account_value);
         
 
-        if bfirst {
-            new_total_supply =  lp_amount;
-        } else {
-            new_total_supply = current_config.total_supply + liquidity;
-        }
+        // if bfirst {
+        //     new_total_supply =  lp_amount;
+        // } else {
+        //     new_total_supply = current_config.total_supply + liquidity;
+        // }
 
-        if bfirst {
-            new_k_last = 0u64;
-        } else {
-            new_k_last = amount_a * amount_b;
-        }
+        // if bfirst {
+        //     new_k_last = 0u64;
+        // } else {
+        //     new_k_last = amount_a * amount_b;
+        // }
 
-        if bfirst {
-            new_lock = false;
-        } else {
-            new_lock = current_config.lock;
-        }
+        // if bfirst {
+        //     new_lock = false;
+        // } else {
+        //     new_lock = current_config.lock;
+        // }
 
-        if bfirst {
-            new_reserve_a = amount_a;
-        } else {
-            new_reserve_a = current_config.reserve_a+ amount_a;
-        }
+        // if bfirst {
+        //     new_reserve_a = amount_a;
+        // } else {
+        //     new_reserve_a = current_config.reserve_a+ amount_a;
+        // }
 
-        if bfirst {
-            new_reserve_b = amount_b;
-        } else {
-            new_reserve_b = current_config.reserve_b+ amount_b;
-        }
+        // if bfirst {
+        //     new_reserve_b = amount_b;
+        // } else {
+        //     new_reserve_b = current_config.reserve_b+ amount_b;
+        // }
 
         let new_config: Config = Config {
             total_supply: new_total_supply,
@@ -528,7 +528,7 @@ program uniswap_v5.aleo {
         Mapping::set(config, 1field, new_config);
     }
 
-    transition burn_public(public to: address, public amount_a: u64, public amount_b: u64) -> (tokenA, tokenB){
+    async transition burn_public(public to: address, public amount_a: u64, public amount_b: u64) -> (tokenA, tokenB, Future){
         let a: tokenA = tokenA {
             owner: to,
             symbol: 128021892001345field,
@@ -541,10 +541,10 @@ program uniswap_v5.aleo {
         };
         let lp_amount: u64 = square_root(amount_a * amount_b);
 
-        return (a, b) then finalize(self.caller, amount_a, amount_b, lp_amount);
+        return (a, b, finalize_burn_public(self.caller, amount_a, amount_b, lp_amount));
     }
 
-    finalize burn_public(addr: address, amount_a: u64, amount_b: u64, lp_amount: u64){
+    async function finalize_burn_public(addr: address, amount_a: u64, amount_b: u64, lp_amount: u64){
         let current_config: Config = Mapping::get_or_use(config, 1field,
             Config {
                 total_supply: 0u64,
@@ -575,7 +575,7 @@ program uniswap_v5.aleo {
          });
     }
 
-    transition swap_a_to_b_private(to: address, token_a: tokenA, amount_a: u64, amount_b: u64) -> (tokenA, tokenB){
+    async transition swap_a_to_b_private(to: address, token_a: tokenA, amount_a: u64, amount_b: u64) -> (tokenA, tokenB, Future){
         assert(token_a.amount - amount_a>=0u64);
         let difference_a: u64 = token_a.amount - amount_a;
         let remaining_a: tokenA = tokenA {
@@ -590,10 +590,10 @@ program uniswap_v5.aleo {
             amount: amount_b,
         };
 
-        return (remaining_a, b) then finalize(amount_a, amount_b);
+        return (remaining_a, b, finalize_swap_a_to_b_private(amount_a, amount_b));
     }
 
-    finalize swap_a_to_b_private(amount_a: u64, amount_b: u64){
+    async function finalize_swap_a_to_b_private(amount_a: u64, amount_b: u64){
         let current_config: Config = Mapping::get_or_use(config, 1field,
             Config {
                 total_supply: 0u64,
@@ -620,12 +620,12 @@ program uniswap_v5.aleo {
          });
     }
 
-    transition swap_a_to_b_public(public to: address, public amount_a: u64,public amount_b: u64){
+    async transition swap_a_to_b_public(public to: address, public amount_a: u64,public amount_b: u64) -> Future {
 
-        return then finalize(self.caller, to, amount_a, amount_b);
+        return finalize_swap_a_to_b_public(self.caller, to, amount_a, amount_b);
     }
 
-    finalize swap_a_to_b_public(from: address, to: address, amount_a: u64, amount_b: u64){
+    async function finalize_swap_a_to_b_public(from: address, to: address, amount_a: u64, amount_b: u64){
         let from_token_a_amount:u64 = Mapping::get_or_use(account_a, from, 0u64);
         assert(from_token_a_amount >= amount_a);
         Mapping::set(account_a, from, from_token_a_amount - amount_a);
@@ -661,7 +661,7 @@ program uniswap_v5.aleo {
     }
 
 
-    transition swap_b_to_a_private(to: address, token_b: tokenB, amount_b: u64, amount_a: u64) -> (tokenB, tokenA){
+    async transition swap_b_to_a_private(to: address, token_b: tokenB, amount_b: u64, amount_a: u64) -> (tokenB, tokenA, Future){
         assert(token_b.amount - amount_b>=0u64);
         let difference_b: u64 = token_b.amount - amount_b;
         let remaining_b: tokenB = tokenB {
@@ -676,10 +676,10 @@ program uniswap_v5.aleo {
             amount: amount_a,
         };
 
-        return (remaining_b, a) then finalize(self.caller, amount_b, amount_a);
+        return (remaining_b, a, finalize_swap_b_to_a_private(self.caller, amount_b, amount_a));
     }
 
-    finalize swap_b_to_a_private(addr: address, amount_b: u64, amount_a: u64){
+    async function finalize_swap_b_to_a_private(addr: address, amount_b: u64, amount_a: u64){
         let current_config: Config = Mapping::get_or_use(config, 1field,
             Config {
                 total_supply: 0u64,
@@ -706,11 +706,11 @@ program uniswap_v5.aleo {
          });
     }
 
-    transition swap_b_to_a_public(public to: address, public amount_b: u64, public amount_a: u64){
-        return then finalize(self.caller, to, amount_b, amount_a);
+    async transition swap_b_to_a_public(public to: address, public amount_b: u64, public amount_a: u64) -> Future {
+        return finalize_swap_b_to_a_public(self.caller, to, amount_b, amount_a);
     }
 
-    finalize swap_b_to_a_public(from: address, to: address, amount_b: u64, amount_a: u64){
+    async function finalize_swap_b_to_a_public(from: address, to: address, amount_b: u64, amount_a: u64){
         let from_token_b_amount:u64 = Mapping::get_or_use(account_b, from, 0u64);
         assert(from_token_b_amount >= amount_b);
         Mapping::set(account_b, from, from_token_b_amount - amount_b);
@@ -786,3 +786,4 @@ program uniswap_v5.aleo {
     }
 
 }
+
